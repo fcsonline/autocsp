@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title> </title>
+  </head>
+  <body>
+
+    <h2>Script tags</h2>
+    <h3>Local</h3>
+    <script src="../bundle.js"></script>
+    <h3>Remote</h3>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+
+    <h2>Nonce tags</h2>
+    <script nonce="cdfea2d">
+      var message = 'Welcome to AutoCSP!';
+      console.log(message);
+    </script>
+
+    <h2>Inline tags, digest them</h2>
+    <script>
+      var message = 'A Content Security Policy header generator';
+      console.log(message);
+    </script>
+
+    <h2>Style tags</h2>
+    <h3>Local</h3>
+    <link href="./example.css" rel="stylesheet">
+    <h3>Remote</h3>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <h2>Image tags</h2>
+    <h3>Local</h3>
+    <img src="./example.png" alt="">
+    <h3>Remote</h3>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Pong.png/440px-Pong.png" alt="">
+
+    <h2>Frame tags</h2>
+    <h2>Media tags (Audio, Video)</h2>
+    <audio controls>
+      <source src="horse.ogg" type="audio/ogg">
+      <source src="horse.mp3" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
+    <video width="320" height="240" controls>
+      <source src="movie.mp4" type="video/mp4">
+      <source src="movie.ogg" type="video/ogg">
+      Your browser does not support the video tag.
+    </video>
+    <h2>Frame tags</h2>
+    <iframe src="http://google.com">
+
+    <h2>Object tags</h2>
+    <embed src="http://example.com">
+    </embed>
+  </body>
+</html>
