@@ -1,19 +1,31 @@
 {
   "name": "autocsp",
+  "description": "Tool to generate a valid Content Security Policy header for your current webpage, with nonce, integrity hashes, etc.",
   "version": "0.1.0",
+  "keywords": ["csp", "content", "security", "policy", "headers", "automatic"],
   "scripts": {
     "build": "webpack"
   },
+  "author": {
+    "email": "fcsonlineb@gmail.com",
+    "name": "Ferran Basora"
+  },
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/fcsonline/autocsp.git",
+    "type": "git"
+  },
+  "bugs": "https://github.com/fcsonline/autocsp/issues",
   "devDependencies": {
-    "babel-cli": "^6.0.0",
-    "babel-core": "^6.5.2",
+    "json-loader": "^0.5.4",
+    "babel-preset-es2015": "^6.5.0",
     "babel-loader": "^6.2.3",
-    "babel-preset-es2015": "^6.5.0"
+    "babel-core": "^6.5.2",
+    "babel-cli": "^6.0.0"
   },
   "dependencies": {
     "cheerio": "^0.20.0",
     "crypto-js": "^3.1.6",
-    "jquery": "^2.2.0",
     "underscore": "^1.8.3",
     "webpack": "^1.12.13"
   }
