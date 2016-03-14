@@ -1,19 +1,14 @@
 const cheerio = require('cheerio');
 const _ = require('underscore');
-const CryptoJS = require('crypto-js');
+const Base64 = require('crypto-js/enc-base64');
 const SHA256 = require('crypto-js/sha256');
 
 const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
 const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?/i;
 
-let $;
-
-window.onload = () => {
-  $ = cheerio.load(document.documentElement.innerHTML);
-};
-
 const AutoCSP = {
   generateCurrentRule() {
+    const $ = cheerio.load(document.documentElement.innerHTML);
     const scripts = $('script[src]').map(function(){return this.attribs.src;}).get();
     const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.firstChild.data});
     const nonces = $('script').filter(':not([src])').filter('[nonce]').map(function(){return this.attribs.nonce});
@@ -68,7 +63,7 @@ const AutoCSP = {
 
   getHashes(contents) {
     const hashes = _.map(contents, function (content) {
-      const hash = CryptoJS.enc.Base64.stringify(SHA256(content));
+      const hash = Base64.stringify(SHA256(content));
       return `'sha256-${hash}'`;
     });
 
@@ -76,4 +71,4 @@ const AutoCSP = {
   }
 }
 
-export default AutoCSP;
+module.exports = AutoCSP;
