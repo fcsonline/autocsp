@@ -2,8 +2,11 @@
 
 ![](https://api.travis-ci.org/fcsonline/autocsp.svg)
 
-Autocsp is just another tool to generate a valid Content Security Policy header
-for your current webpage.
+AutoCSP is not just another tool to generate a valid Content Security Policy header
+for your current webpage. Do this and many other things like:
+
+- Integrity hashes
+- Inline hashes
 
 Basically, it analizes your DOM tags looking for sources for all the rules:
 
@@ -42,9 +45,36 @@ in the past, this tool could be useful to spot them.
 AutoCSP.rule();
 ```
 
-# Improvements
+By default, AutoCSP generates all the hashes with `sha256` algorithm but you
+can change it to one of the availble ones:
 
-- Generate integrity tags fo remote scripts
+- sha1
+- sha256 * Default
+- sha224
+- sha512
+- sha384
+
+Example:
+```javascript
+AutoCSP.setup('sha384');
+```
+
+As we said before, you can do:
+
+```javascript
+AutoCSP.hashes();
+```
+![Hashes](./doc/hashes.png)
+
+```javascript
+AutoCSP.integrities();
+```
+
+![Integrities](./doc/integrities.png)
+
+# TODO
+
+- Test
 - Detect font-src urls: we need to parse css to retreive them
 - Detect connect urls: we need to analyze XHR traffic
 
