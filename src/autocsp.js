@@ -33,9 +33,9 @@ const AutoCSP = {
     const corsme  = 'https://crossorigin.me/'; // Thank you for your cors :*
     const defaults  = {mode: 'cors', cache: 'default'};
     const $ = zepto(window);
-    const scripts = $('script[src]').map(function(){return $(this).attr('src');});
+    const scripts = $('script[src]').map((i, node) => $(node).attr('src'));
 
-    const integrities = _.reject(scripts, this.isLocal).map(function (url) {
+    const integrities = _.reject(scripts, this.isLocal).map((url) => {
       if (/^\/\//.test(url)) {
         url = `https:${url}`;
       }
@@ -57,7 +57,7 @@ const AutoCSP = {
           return {url: resource.url, hash: this.hash(resource.content)};
         });
       })
-      .then(function (integrities) {
+      .then((integrities) => {
         console.log('Integrity hashes from remote origin scripts:');
         console.table(integrities);
       });
@@ -65,9 +65,9 @@ const AutoCSP = {
 
   hashes() {
     const $ = zepto(window);
-    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.text;});
+    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map((i, node) => node.text);
 
-    const hashes = _.map(inlines, function (content) {
+    const hashes = _.map(inlines, (content) => {
       return {data: content, hash: this.hash(content)};
     });
 
@@ -77,14 +77,14 @@ const AutoCSP = {
 
   rule() {
     const $ = zepto(window);
-    const scripts = $('script[src]').map(function(){return $(this).attr('src');});
-    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.text;});
-    const nonces = $('script').filter(':not([src])').filter('[nonce]').map(function(){return $(this).attr('nonce');});
-    const styles = $('link[rel="stylesheet"]').map(function(){return $(this).attr('href');});
-    const images = $('img[src]').map(function(){return $(this).attr('src');});
-    const frames = $('frame[src],iframe[src]').map(function(){return $(this).attr('src');});
-    const media = $('audio source,video source').map(function(){return $(this).attr('src');});
-    const objects = $('object,embed').map(function(){return $(this).attr('data') || $(this).attr('src');});
+    const scripts = $('script[src]').map((i, node) => $(node).attr('src'));
+    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map((node) => node.text);
+    const nonces = $('script').filter(':not([src])').filter('[nonce]').map((i, node) => $(node).attr('nonce'));
+    const styles = $('link[rel="stylesheet"]').map((i, node) => $(node).attr('href'));
+    const images = $('img[src]').map((i, node) => $(node).attr('src'));
+    const frames = $('frame[src],iframe[src]').map((i, node) => $(node).attr('src'));
+    const media = $('audio source,video source').map((i, node) => $(node).attr('src'));
+    const objects = $('object,embed').map((i, node) => $(node).attr('data') || $(node).attr('src'));
 
     const fonts = ['/foo']; // FIXME
     const connects = ['/foo']; // FIXME
@@ -112,7 +112,7 @@ const AutoCSP = {
   getRemotes(urls) {
     const self = _.some(urls, this.isLocal);
 
-    const remotes = _.uniq(_.compact(_.map(urls, function (url) {
+    const remotes = _.uniq(_.compact(_.map(urls, (url) => {
       const match = url.match(url_regexp);
       const dmatch = match && match[0] && url.match(domain_regexp);
 
@@ -124,7 +124,7 @@ const AutoCSP = {
   },
 
   getNonces(values) {
-    const nonces = _.map(values, function (nonce) {
+    const nonces = _.map(values, (nonce) => {
       return `'nonce-${nonce}'`;
     });
 
@@ -132,7 +132,7 @@ const AutoCSP = {
   },
 
   getHashes(contents) {
-    const hashes = _.map(contents, function (content) {
+    const hashes = _.map(contents, (content) => {
       return `'${this.hash(content)}'`;
     });
 
