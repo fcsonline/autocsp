@@ -39,7 +39,7 @@ afterwards. However, for projects that have not controlled their source origins
 in the past, this tool could be useful to spot them.
 
 ```javascript
-AutoCSP.generateCurrentRule();
+AutoCSP.rule();
 ```
 
 # Improvements

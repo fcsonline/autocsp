@@ -7,7 +7,7 @@ const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2
 const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?/i;
 
 const AutoCSP = {
-  generateCurrentRule() {
+  rule() {
     const $ = cheerio.load(document.documentElement.innerHTML);
     const scripts = $('script[src]').map(function(){return this.attribs.src;}).get();
     const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.firstChild.data});
