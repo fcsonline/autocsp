@@ -7,6 +7,18 @@ const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2
 const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?/i;
 
 const AutoCSP = {
+  hashes() {
+    const $ = zepto(window);
+    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.firstChild.data});
+
+    const hashes = _.map(inlines, function (content) {
+      const hash = Base64.stringify(SHA256(content));
+      return {data: content, hash: hash, rule: `'sha256-${hash}'`};
+    });
+
+    console.table(hashes);
+  },
+
   rule() {
     const $ = zepto(window);
     const scripts = $('script[src]').map(function(){return $(this).attr('src');});
