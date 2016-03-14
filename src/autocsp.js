@@ -1,4 +1,4 @@
-const cheerio = require('cheerio');
+const zepto = require('zepto-node');
 const _ = require('underscore');
 const Base64 = require('crypto-js/enc-base64');
 const SHA256 = require('crypto-js/sha256');
@@ -8,15 +8,15 @@ const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA
 
 const AutoCSP = {
   rule() {
-    const $ = cheerio.load(document.documentElement.innerHTML);
-    const scripts = $('script[src]').map(function(){return this.attribs.src;}).get();
-    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.firstChild.data});
-    const nonces = $('script').filter(':not([src])').filter('[nonce]').map(function(){return this.attribs.nonce});
-    const styles = $('link[rel="stylesheet"]').map(function(){return this.attribs.href;}).get();
-    const images = $('img[src]').map(function(){return this.attribs.src;}).get();
-    const frames = $('frame[src],iframe[src]').map(function(){return this.attribs.src;}).get();
-    const media = $('audio source,video source').map(function(){return this.attribs.src}).get();
-    const objects = $('object,embed').map(function(){return this.attribs.data || this.attribs.src}).get();
+    const $ = zepto(window);
+    const scripts = $('script[src]').map(function(){return $(this).attr('src');});
+    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.text;});
+    const nonces = $('script').filter(':not([src])').filter('[nonce]').map(function(){return $(this).attr('nonce');});
+    const styles = $('link[rel="stylesheet"]').map(function(){return $(this).attr('href');});
+    const images = $('img[src]').map(function(){return $(this).attr('src');});
+    const frames = $('frame[src],iframe[src]').map(function(){return $(this).attr('src');});
+    const media = $('audio source,video source').map(function(){return $(this).attr('src');});
+    const objects = $('object,embed').map(function(){return $(this).attr('data') || $(this).attr('src');});
 
     const fonts = ['/foo']; // FIXME
     const connects = ['/foo']; // FIXME

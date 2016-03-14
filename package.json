@@ -2,7 +2,14 @@
   "name": "autocsp",
   "description": "Tool to generate a valid Content Security Policy header for your current webpage, with nonce, integrity hashes, etc.",
   "version": "0.1.0",
-  "keywords": ["csp", "content", "security", "policy", "headers", "automatic"],
+  "keywords": [
+    "csp",
+    "content",
+    "security",
+    "policy",
+    "headers",
+    "automatic"
+  ],
   "scripts": {
     "build": "webpack"
   },
@@ -24,9 +31,9 @@
     "babel-cli": "^6.0.0"
   },
   "dependencies": {
-    "cheerio": "^0.20.0",
     "crypto-js": "^3.1.6",
     "underscore": "^1.8.3",
-    "webpack": "^1.12.13"
+    "webpack": "^1.12.13",
+    "zepto-node": "^1.0.0"
   }
 }
