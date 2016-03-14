@@ -2,20 +2,57 @@ const zepto = require('zepto-node');
 const _ = require('underscore');
 const Base64 = require('crypto-js/enc-base64');
 const SHA256 = require('crypto-js/sha256');
+const SHA382 = require('crypto-js/sha384');
 
 const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
 const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?/i;
 
 const AutoCSP = {
+  integrities() {
+    const corsme  = 'https://crossorigin.me/'; // Thank you for your cors :*
+    const defaults  = {mode: 'cors', cache: 'default'};
+    const $ = zepto(window);
+    const scripts = $('script[src]').map(function(){return $(this).attr('src');});
+
+    const integrities = _.reject(scripts, this.isLocal).map(function (url) {
+      if (/^\/\//.test(url)) {
+        url = `https:${url}`;
+      }
+
+      const promise = fetch(`${corsme}${url}`, defaults)
+        .then((response) => {
+          return response.text();
+        }).then((content) => {
+          return { url: url, content: content };
+        });
+
+      return Promise.resolve(promise);
+    });
+
+    Promise
+      .all(integrities)
+      .then((resources) => {
+        return _.map(resources, (resource) => {
+          const hash = Base64.stringify(SHA256(resource.content));
+          return {url: resource.url, hash: `sha384-${hash}`};
+        });
+      })
+      .then(function (integrities) {
+        console.log('Integrity hashes from remote origin scripts:');
+        console.table(integrities);
+      });
+  },
+
   hashes() {
     const $ = zepto(window);
-    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.firstChild.data});
+    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.text;});
 
     const hashes = _.map(inlines, function (content) {
       const hash = Base64.stringify(SHA256(content));
-      return {data: content, hash: hash, rule: `'sha256-${hash}'`};
+      return {data: content, hash: `sha256-${hash}`};
     });
 
+    console.log('Nonce hashes for inline scripts:');
     console.table(hashes);
   },
 
@@ -49,10 +86,12 @@ const AutoCSP = {
     return `Content-Security-Policy: default-src${default_src}; script-src${script_src}${digest_src}${nonce_src}; style-src${style_src}; img-src${img_src}; child-src${child_src}; font-src${font_src}; connect-src${connect_src}; media-src${media_src}; object-src${object_src};`;
   },
 
+  isLocal(url) {
+    return /^\/[^\/]/.test(url) || /^\./.test(url);
+  },
+
   getRemotes(urls) {
-    const self = _.some(urls, function (url) {
-      return /^\/[^\/]/.test(url) || /^\./.test(url);
-    });
+    const self = _.some(urls, this.isLocal);
 
     const remotes = _.uniq(_.compact(_.map(urls, function (url) {
       const match = url.match(url_regexp);
