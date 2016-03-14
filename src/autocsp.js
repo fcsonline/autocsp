@@ -1,13 +1,34 @@
-const zepto = require('zepto-node');
 const _ = require('underscore');
+const zepto = require('zepto-node');
 const Base64 = require('crypto-js/enc-base64');
-const SHA256 = require('crypto-js/sha256');
-const SHA382 = require('crypto-js/sha384');
+const algorithms = {
+  sha1:   require('crypto-js/sha1'),
+  sha256: require('crypto-js/sha256'),
+  sha224: require('crypto-js/sha224'),
+  sha512: require('crypto-js/sha512'),
+  sha384: require('crypto-js/sha384')
+}
 
 const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
 const domain_regexp = /(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?/i;
 
 const AutoCSP = {
+  algorithm: 'sha256',
+
+  setup(algorithm) {
+    if (!algorithms[algorithm]) {
+      throw new Error('Not supported algorithm')
+    }
+
+    this.algorithm = algorithm;
+  },
+
+  hash(data) {
+    const algorithm = algorithms[this.algorithm];
+    const hash = Base64.stringify(algorithm(data));
+    return `${this.algorithm}-${hash}`;
+  },
+
   integrities() {
     const corsme  = 'https://crossorigin.me/'; // Thank you for your cors :*
     const defaults  = {mode: 'cors', cache: 'default'};
@@ -33,8 +54,7 @@ const AutoCSP = {
       .all(integrities)
       .then((resources) => {
         return _.map(resources, (resource) => {
-          const hash = Base64.stringify(SHA256(resource.content));
-          return {url: resource.url, hash: `sha384-${hash}`};
+          return {url: resource.url, hash: this.hash(resource.content)};
         });
       })
       .then(function (integrities) {
@@ -48,8 +68,7 @@ const AutoCSP = {
     const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map(function(){return this.text;});
 
     const hashes = _.map(inlines, function (content) {
-      const hash = Base64.stringify(SHA256(content));
-      return {data: content, hash: `sha256-${hash}`};
+      return {data: content, hash: this.hash(content)};
     });
 
     console.log('Nonce hashes for inline scripts:');
@@ -114,8 +133,7 @@ const AutoCSP = {
 
   getHashes(contents) {
     const hashes = _.map(contents, function (content) {
-      const hash = Base64.stringify(SHA256(content));
-      return `'sha256-${hash}'`;
+      return `'${this.hash(content)}'`;
     });
 
     return ['', ...hashes].join(' ');
