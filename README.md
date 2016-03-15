@@ -119,14 +119,6 @@ AutoCSP.integrities();
 - Detect font-src urls: we need to parse css to retreive them
 - Detect connect urls: we need to analyze XHR traffic
 
-### Report a bug
-
-1. Check if the bug is already fixed in the [master branch][master] since the
-last release.
-2. Check [existing issues][issues]. Open a new one, including exact browser &
-platform information. For better formatting of your report, see
-[GitHub-flavored Markdown][mkd].
-
 ### License
 
 (The MIT License)
