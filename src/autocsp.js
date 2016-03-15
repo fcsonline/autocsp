@@ -4,9 +4,8 @@ const Base64 = require('crypto-js/enc-base64');
 const algorithms = {
   sha1:   require('crypto-js/sha1'),
   sha256: require('crypto-js/sha256'),
-  sha224: require('crypto-js/sha224'),
-  sha512: require('crypto-js/sha512'),
-  sha384: require('crypto-js/sha384')
+  sha384: require('crypto-js/sha384'),
+  sha512: require('crypto-js/sha512')
 }
 
 const url_regexp = /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
