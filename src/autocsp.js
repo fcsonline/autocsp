@@ -77,8 +77,8 @@ const AutoCSP = {
   rule() {
     const $ = zepto(window);
     const scripts = $('script[src]').map((i, node) => $(node).attr('src'));
-    const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map((node) => node.text);
-    const nonces = $('script').filter(':not([src])').filter('[nonce]').map((i, node) => $(node).attr('nonce'));
+    const inlines = $('script').not('[src],[nonce]').map((i, node) => node.text);
+    const nonces = $('script[nonce]').map((i, node) => $(node).attr('nonce'));
     const styles = $('link[rel="stylesheet"]').map((i, node) => $(node).attr('href'));
     const images = $('img[src]').map((i, node) => $(node).attr('src'));
     const frames = $('frame[src],iframe[src]').map((i, node) => $(node).attr('src'));
