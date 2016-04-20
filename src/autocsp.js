@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const zepto = require('zepto-node');
+const $ = require('zepto-browserify').$;
 const Base64 = require('crypto-js/enc-base64');
 const algorithms = {
   sha1:   require('crypto-js/sha1'),
@@ -31,7 +31,6 @@ const AutoCSP = {
   integrities() {
     const corsme  = 'https://crossorigin.me/'; // Thank you for your cors :*
     const defaults  = {mode: 'cors', cache: 'default'};
-    const $ = zepto(window);
     const scripts = $('script[src]').map((i, node) => $(node).attr('src'));
 
     const integrities = _.reject(scripts, this.isLocal).map((url) => {
@@ -63,7 +62,6 @@ const AutoCSP = {
   },
 
   hashes() {
-    const $ = zepto(window);
     const inlines = $('script').filter(':not([src])').filter(':not([nonce])').map((i, node) => node.text);
 
     const hashes = _.map(inlines, (content) => {
@@ -75,7 +73,6 @@ const AutoCSP = {
   },
 
   rule() {
-    const $ = zepto(window);
     const scripts = $('script[src]').map((i, node) => $(node).attr('src'));
     const inlines = $('script').not('[src],[nonce]').map((i, node) => node.text);
     const nonces = $('script[nonce]').map((i, node) => $(node).attr('nonce'));

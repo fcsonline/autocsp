@@ -24,17 +24,17 @@
   },
   "bugs": "https://github.com/fcsonline/autocsp/issues",
   "devDependencies": {
-    "babel-cli": "^6.0.0",
-    "babel-core": "^6.5.2",
-    "babel-loader": "^6.2.3",
-    "babel-preset-es2015": "^6.5.0",
-    "http-server": "^0.9.0",
-    "json-loader": "^0.5.4"
+    "babel-cli": "6.0.0",
+    "babel-core": "6.5.2",
+    "babel-loader": "6.2.3",
+    "babel-preset-es2015": "6.5.0",
+    "http-server": "0.9.0",
+    "json-loader": "0.5.4"
   },
   "dependencies": {
-    "crypto-js": "^3.1.6",
-    "underscore": "^1.8.3",
-    "webpack": "^1.12.13",
-    "zepto-node": "^1.0.0"
+    "crypto-js": "3.1.6",
+    "underscore": "1.8.3",
+    "webpack": "1.12.13",
+    "zepto-browserify": "1.0.0"
   }
 }
